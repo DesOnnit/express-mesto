@@ -4,7 +4,7 @@ const getUsers = (req, res) => {
   User.find({})
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Такой страницы не сущетсвует' });
+        return res.status(400).send({ message: 'Такой страницы не сущетсвует' });
       }
       return res.status(200).send(user);
     })
@@ -51,7 +51,7 @@ const updateProfile = (req, res) => {
 const updateAvatar = (req, res) => {
   const userdId = req.user._id;
   const { avatar } = req.body;
-  User.findByIdAndUpdate(userdId, {avatar})
+  User.findByIdAndUpdate(userdId, { avatar })
     .then((user) => {
       if (!user) {
         res.status(400).send({ message: 'Ошибка' });

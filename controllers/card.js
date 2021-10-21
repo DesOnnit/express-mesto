@@ -4,7 +4,7 @@ const getCards = (req, res) => {
   Card.find({})
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ message: 'Такой страницы не сущетсвует' });
+        return res.status(400).send({ message: 'Такой страницы не сущетсвует' });
       }
       return res.status(200).send(card);
     })
@@ -57,13 +57,13 @@ const likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-  .then((like) => {
-    if (!like) {
-      res.status(400).send({ message: 'Ошибка' });
-    }
-    res.status(201).send(like);
-  })
-  .catch(() => res.status(500).send({ message: 'Что-то пошло не так' }));
+    .then((like) => {
+      if (!like) {
+        res.status(400).send({ message: 'Ошибка' });
+      }
+      res.status(201).send(like);
+    })
+    .catch(() => res.status(500).send({ message: 'Что-то пошло не так' }));
 }
 
 module.exports = {
