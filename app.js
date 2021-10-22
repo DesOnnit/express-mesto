@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '616f111c37201ae40c085624'
+    _id: '616f111c37201ae40c085624',
   };
   next();
 });
@@ -20,5 +20,6 @@ app.use((req, res, next) => {
 app.use(router);
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
 });

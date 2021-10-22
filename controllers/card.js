@@ -1,14 +1,15 @@
 const Card = require('../models/card');
+const BadRequest = require('../errors/BadRequest');
+const NotFound = require('../errors/NotFound');
 
 const getCards = (req, res) => {
   Card.find({})
     .then((card) => {
-      if (!card) {
-        return res.status(400).send({ message: 'Такой страницы не сущетсвует' });
-      }
-      return res.status(200).send(card);
+      res.status(200).send(card);
     })
-    .catch(() => res.status(500).send({ message: 'Что-то пошло не так' }));
+    .catch(() => {
+      throw new BadRequest('Что-то пошло не так');
+    });
 };
 
 const createCard = (req, res) => {
@@ -16,12 +17,11 @@ const createCard = (req, res) => {
   const owner = req.user._id;
   Card.create({ name, link, owner })
     .then((card) => {
-      if (!card) {
-        res.status(400).send({ message: 'Ошибка' });
-      }
       res.status(201).send(card);
     })
-    .catch(() => res.status(500).send({ message: 'Что-то пошло не так' }));
+    .catch(() => {
+      throw new BadRequest('Что-то пошло не так');
+    });
 };
 
 const deleteCard = (req, res) => {
@@ -29,12 +29,14 @@ const deleteCard = (req, res) => {
   Card.findByIdAndRemove(cardId)
     .then((id) => {
       if (!id) {
-        res.status(400).send({ message: 'Ошибка' });
+        throw new NotFound('Такой карточки не сущетсвует');
       }
       res.status(200).send(id);
     })
-    .catch(() => res.status(500).send({ message: 'Что-то пошло не так' }));
-}
+    .catch(() => {
+      throw new BadRequest('Что-то пошло не так');
+    });
+};
 
 const dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
@@ -44,12 +46,14 @@ const dislikeCard = (req, res) => {
   )
     .then((like) => {
       if (!like) {
-        res.status(400).send({ message: 'Ошибка' });
+        throw new NotFound('Такой карточки не сущетсвует');
       }
       res.status(200).send(like);
     })
-    .catch(() => res.status(500).send({ message: 'Что-то пошло не так' }));
-}
+    .catch(() => {
+      throw new BadRequest('Что-то пошло не так');
+    });
+};
 
 const likeCard = (req, res) => {
   Card.findByIdAndUpdate(
@@ -59,17 +63,19 @@ const likeCard = (req, res) => {
   )
     .then((like) => {
       if (!like) {
-        res.status(400).send({ message: 'Ошибка' });
+        throw new NotFound('Такой карточки не сущетсвует');
       }
       res.status(201).send(like);
     })
-    .catch(() => res.status(500).send({ message: 'Что-то пошло не так' }));
-}
+    .catch(() => {
+      throw new BadRequest('Что-то пошло не так');
+    });
+};
 
 module.exports = {
   getCards,
   createCard,
   deleteCard,
   dislikeCard,
-  likeCard
+  likeCard,
 };
