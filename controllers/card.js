@@ -53,7 +53,10 @@ const dislikeCard = (req, res) => {
       }
       res.status(200).send(like);
     })
-    .catch(() => {
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(ERR_BAD_REQUEST).send({ message: 'Ошибка валидации' });
+      }
       res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
 };
@@ -70,7 +73,10 @@ const likeCard = (req, res) => {
       }
       res.status(201).send(like);
     })
-    .catch(() => {
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(ERR_BAD_REQUEST).send({ message: 'Ошибка валидации' });
+      }
       res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
 };
