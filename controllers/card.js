@@ -1,15 +1,15 @@
 const Card = require('../models/card');
-const BadRequest = require('../errors/BadRequest');
-const NotFound = require('../errors/NotFound');
+
+const ERR_BAD_REQUEST = 400;
+const ERR_NOT_FOUND = 404;
+const ERR_DEFAULT = 500;
 
 const getCards = (req, res) => {
   Card.find({})
     .then((card) => {
       res.status(200).send(card);
     })
-    .catch(() => {
-      throw new BadRequest('Что-то пошло не так');
-    });
+    .catch(() => res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' }));
 };
 
 const createCard = (req, res) => {
@@ -21,9 +21,9 @@ const createCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequest(err.message);
+        res.status(ERR_BAD_REQUEST).send({ message: 'Ошибка валидации' });
       }
-      res.status(500).send({ message: 'Что-то пошло не так' });
+      res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
 };
 
@@ -32,12 +32,12 @@ const deleteCard = (req, res) => {
   Card.findByIdAndRemove(cardId)
     .then((id) => {
       if (!id) {
-        throw new NotFound('Такой карточки не сущетсвует');
+        res.status(ERR_NOT_FOUND).send({ message: 'Такого пользователя не существует' });
       }
       res.status(200).send(id);
     })
     .catch(() => {
-      throw new BadRequest('Что-то пошло не так');
+      res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
 };
 
@@ -49,12 +49,12 @@ const dislikeCard = (req, res) => {
   )
     .then((like) => {
       if (!like) {
-        throw new NotFound('Такой карточки не сущетсвует');
+        res.status(ERR_NOT_FOUND).send({ message: 'Такого пользователя не существует' });
       }
       res.status(200).send(like);
     })
     .catch(() => {
-      throw new BadRequest('Что-то пошло не так');
+      res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
 };
 
@@ -66,12 +66,12 @@ const likeCard = (req, res) => {
   )
     .then((like) => {
       if (!like) {
-        throw new NotFound('Такой карточки не сущетсвует');
+        res.status(ERR_NOT_FOUND).send({ message: 'Такого пользователя не существует' });
       }
       res.status(201).send(like);
     })
     .catch(() => {
-      throw new BadRequest('Что-то пошло не так');
+      res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
 };
 

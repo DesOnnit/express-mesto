@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const router = require('./routes/index');
-const NotFound = require('./errors/NotFound');
+
+const ERR_NOT_FOUND = 404;
 
 const app = express();
 const { PORT = 3001 } = process.env;
@@ -19,8 +20,8 @@ app.use((req, res, next) => {
 });
 
 app.use(router);
-app.use('*', () => {
-  throw new NotFound('Запрашиваемый ресурс не найден');
+app.use('*', (req, res) => {
+  res.status(ERR_NOT_FOUND).send({ message: 'Запрашиваемый ресурс не найден' });
 });
 
 app.listen(PORT, () => {
