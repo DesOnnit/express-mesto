@@ -22,8 +22,11 @@ const createCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(ERR_BAD_REQUEST).send({ message: 'Ошибка валидации' });
+      } else if (err.name === 'CastError') {
+        res.status(ERR_BAD_REQUEST).send({ message: 'Переданы некорректные данные при создании карточки' });
+      } else {
+        res.status(ERR_DEFAULT).send({ message: 'Произошла ошибка' });
       }
-      res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
 };
 
@@ -36,7 +39,10 @@ const deleteCard = (req, res) => {
       }
       res.status(200).send(id);
     })
-    .catch(() => {
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(ERR_BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
+      }
       res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
 };
@@ -54,8 +60,8 @@ const dislikeCard = (req, res) => {
       res.status(200).send(like);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(ERR_BAD_REQUEST).send({ message: 'Ошибка валидации' });
+      if (err.name === 'CastError') {
+        res.status(ERR_BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
       res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
@@ -74,8 +80,8 @@ const likeCard = (req, res) => {
       res.status(201).send(like);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(ERR_BAD_REQUEST).send({ message: 'Ошибка валидации' });
+      if (err.name === 'CastError') {
+        res.status(ERR_BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
       res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });

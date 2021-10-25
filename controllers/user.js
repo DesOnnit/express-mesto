@@ -21,7 +21,12 @@ const getUser = (req, res) => {
       }
       res.status(200).send({ data: user });
     })
-    .catch(() => res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(ERR_BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
+      }
+      res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
+    });
 };
 
 const createUser = (req, res) => {
@@ -49,8 +54,8 @@ const updateProfile = (req, res) => {
       res.status(201).send({ data: user });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(ERR_BAD_REQUEST).send({ message: 'Ошибка валидации' });
+      if (err.name === 'CastError') {
+        res.status(ERR_BAD_REQUEST).send({ message: 'Переданы некорректные данные при обновлении профиля' });
       }
       res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
@@ -67,8 +72,8 @@ const updateAvatar = (req, res) => {
       res.status(201).send({ data: user });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(ERR_BAD_REQUEST).send({ message: 'Ошибка валидации' });
+      if (err.name === 'CastError') {
+        res.status(ERR_BAD_REQUEST).send({ message: 'Переданы некорректные данные при обновлении профиля' });
       }
       res.status(ERR_DEFAULT).send({ message: 'Что-то пошло не так' });
     });
