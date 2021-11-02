@@ -1,11 +1,11 @@
 /* eslint-disable no-useless-escape */
 const { celebrate, Joi } = require('celebrate');
 
-const regex = /(http:\/\/|https:\/\/)(www)*[a-z0-9\-\.\_\~\:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=]+#*/;
+const regex = /^https?:\/\/(www.)?[a-zA-Z0-9-.]+\.[a-zA-Z]{2,}([a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+)*#*$/;
 
 const idUserValidation = celebrate({
   params: Joi.object().keys({
-    userdId: Joi.string().length(24).hex(),
+    userId: Joi.string().length(24).hex(),
   }),
 });
 
