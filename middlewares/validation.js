@@ -1,11 +1,17 @@
 /* eslint-disable no-useless-escape */
 const { celebrate, Joi } = require('celebrate');
 
-const regex = /(http:\/\/|https:\/\/)(www)*[a-z0-9\-\.\_\~\:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=]+#*[^а-я]/;
+const regex = /(http:\/\/|https:\/\/)(www)*[a-z0-9\-\.\_\~\:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=]+#*/;
 
-const idValidation = celebrate({
+const idUserValidation = celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24).hex(),
+    userdId: Joi.string().length(24).hex(),
+  }),
+});
+
+const idCardValidation = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().length(24).hex(),
   }),
 });
 
@@ -52,5 +58,6 @@ module.exports = {
   userAboutValidation,
   avatarValidation,
   loginValidation,
-  idValidation,
+  idUserValidation,
+  idCardValidation,
 };

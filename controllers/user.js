@@ -26,9 +26,8 @@ const getUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         throw new BadRequest('Переданы некорректные данные');
-      }
-    })
-    .catch(next);
+      } else { next(err); }
+    });
 };
 
 const createUser = (req, res, next) => {
@@ -47,11 +46,10 @@ const createUser = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'MongoError' && err.code === 11000) {
+      if (err.name === 'MongoServerError' && err.code === 11000) {
         throw new Conflict('Пользователь с таким email уже существует');
-      }
-    })
-    .catch(next);
+      } else { next(err); }
+    });
 };
 
 const updateProfile = (req, res, next) => {
@@ -67,9 +65,8 @@ const updateProfile = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         throw new BadRequest('Переданы некорректные данные');
-      }
-    })
-    .catch(next);
+      } else { next(err); }
+    });
 };
 
 const updateAvatar = (req, res, next) => {
@@ -85,9 +82,8 @@ const updateAvatar = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         throw new BadRequest('Переданы некорректные данные');
-      }
-    })
-    .catch(next);
+      } else { next(err); }
+    });
 };
 
 const login = (req, res, next) => {

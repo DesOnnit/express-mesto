@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const { Schema, model } = require('mongoose');
-const { isEmail } = require('validator');
+const { isEmail, isURL } = require('validator');
 const Auth = require('../errors/Auth');
 
 const userSchema = new Schema({
@@ -19,6 +19,11 @@ const userSchema = new Schema({
   avatar: {
     type: String,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+    validate: {
+      validator(link) {
+        return isURL(link);
+      },
+    },
   },
   email: {
     type: String,

@@ -21,9 +21,8 @@ const createCard = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequest('Переданы некорректные данные');
-      }
-    })
-    .catch(next);
+      } else { next(err); }
+    });
 };
 
 const deleteCard = (req, res, next) => {
@@ -32,15 +31,15 @@ const deleteCard = (req, res, next) => {
 
   Card.findById(cardId)
     .then((card) => {
+      if (!card) {
+        throw new NotFound('Такой карточки не существует');
+      }
       if (card.owner.toString() === userId) {
         Card.findByIdAndRemove(cardId)
           .then((cardData) => res.send(cardData));
       } else {
         throw new Forbidden('Недостаточно прав!');
       }
-    })
-    .catch(() => {
-      throw new NotFound('Такой карточки не существует');
     })
     .catch(next);
 };
