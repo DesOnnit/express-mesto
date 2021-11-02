@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
+const helmet = require('helmet');
 const router = require('./routes/index');
 const { login, createUser } = require('./controllers/user');
 const auth = require('./middlewares/auth');
@@ -13,7 +14,7 @@ const app = express();
 const { PORT = 3001 } = process.env;
 
 app.use(bodyParser.json());
-
+app.use(helmet());
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.post('/signin', loginValidation, login);
